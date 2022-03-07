@@ -8,12 +8,12 @@
     <line
       class="line"
       v-for="(line, index) in lines"
+      v-show="line.visiable"
       :key="index"
-      :x1="line.source.x"
-      :x2="line.target.x"
-      :y1="line.source.y"
-      :y2="line.target.y"
-      v-show="isLineVisiable(line)"
+      :x1="0"
+      :x2="200"
+      :y1="line.y1"
+      :y2="line.y2"
     ></line>
   </svg>
 </template>
@@ -28,12 +28,7 @@ export default {
     },
   },
   methods: {
-    isLineVisiable(line) {
-      if (line.source.y && line.target.y) {
-        return true;
-      }
-      return false;
-    },
+
   },
 };
 </script>

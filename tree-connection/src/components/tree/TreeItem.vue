@@ -1,5 +1,5 @@
 <template>
-  <div class="tree-main">
+  <div class="tree-main" :id="mode + '-' + item.level + '-' + item.name">
     <div
       class="tree-item"
       :style="getStyle"
@@ -67,11 +67,6 @@ export default {
       default: () => ({}),
     },
   },
-  watch: {
-    activeItem(val) {
-      console.log("active", val);
-    },
-  },
   computed: {
     getStyle() {
       return { "padding-left": (this.item.level - 1) * 16 + "px" };
@@ -83,10 +78,10 @@ export default {
       this.$emit("expand", this.item);
     },
     toActive(item) {
-      this.$emit("toActive", item);
+      this.$emit("toActive", { item, _el: this.$el });
     },
     toLink(item) {
-      this.$emit("toLink", item);
+      this.$emit("toLink", {item, _el: this.$el});
     },
   },
 };
