@@ -7,8 +7,10 @@
   >
     <line
       class="line"
+      :class="{ 'line-active': line.active }"
       v-for="(line, index) in lines"
       v-show="line.visiable"
+      @click="selectLine(line)"
       :key="index"
       :x1="0"
       :x2="200"
@@ -28,7 +30,9 @@ export default {
     },
   },
   methods: {
-
+    selectLine(line) {
+      this.$set(line, 'active', !line.active)
+    }
   },
 };
 </script>
@@ -40,5 +44,13 @@ export default {
 .line {
   stroke: rgb(99, 99, 99);
   stroke-width: 1;
+  cursor: pointer;
+}
+.line:hover{
+  stroke-width: 2;
+}
+.line-active {
+  stroke: #409EFF;
+  stroke-width: 2;
 }
 </style>

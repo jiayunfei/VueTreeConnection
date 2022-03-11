@@ -1,18 +1,19 @@
 <template>
   <div class="mapper-container">
     <tree-control
-      :treeData="originData"
-      :activeItem="active.item"
+      :treeData="origin"
+      :activeItem="activeNode.item"
       mode="origin"
       @setActiveItem="setActiveItem"
       @expandNode="expandHandler"
     />
     <Lines
       :lines="lines"
+      @selectLine="selectLine"
       v-if="linesVisiable"
     />
     <tree-control
-      :treeData="targetData"
+      :treeData="target"
       mode="target"
       @addLine="addConnect"
       @expandNode="expandHandler"
@@ -27,42 +28,34 @@ import Lines from "./Lines";
 export default {
   components: { TreeControl, Lines },
   name: "Mapper",
+  props: {
+    origin: {
+      type: Array,
+      required: true
+    },
+    target: {
+      type: Array,
+      required: true
+    },
+    lines: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
-      originData: [
-        {
-          name: "第一层：hhh",
-          children: [{ name: "第二次 哈哈哈" }, { name: "第二次 哈哈哈111" }],
-        },
-        {
-          name: "第一层222",
-        },
-      ],
-      targetData: [
-        {
-          name: "第一层：hhh",
-          children: [{ name: "第二次 哈哈哈" }, { name: "第二次 哈哈哈111" }],
-        },
-        {
-          name: "第一层222",
-        },
-      ],
-      lines: [
-        {
-          source: {
-            item: { name: "第一层222" },
-          },
-          target: {
-            item: { name: "第一层222" },
-          }
-        }
-      ],
       linesVisiable: true,
-      active: {}
+      activeNode: {},
+      activeLines: []
     };
   },
   mounted() {
     this.initLines()
+    const ctx = this
+    window.addEventListener('keydown', this.removeLines.bind(ctx))
+  },
+  destroyed() {
+    window.removeEventListener('keydown', this.removeLines)
   },
   methods: {
     initLines() {
@@ -85,9 +78,12 @@ export default {
         this.expandHandler()
       })
     },
+    selectLine(opt) {
+      this.activeLines.push(opt)
+    },
     searchNodeForLine(line) {
-      const origin = this.searchNode(line.source.item, this.originData)
-      const target = this.searchNode(line.target.item, this.targetData)
+      const origin = this.searchNode(line.source.item, this.origin)
+      const target = this.searchNode(line.target.item, this.target)
       return [origin, target]
     },
     searchNode(lineNode, data) {
@@ -105,7 +101,7 @@ export default {
       }
     },
     setActiveItem(origin) {
-      this.active = origin
+      this.activeNode = origin
     },
     getElCoorY(el) {
       if (!el) {
@@ -119,10 +115,10 @@ export default {
       return top + 13
     },
     addConnect(target) {
-      if (!this.active._el) {
+      if (!this.activeNode._el) {
         return;
       }
-      this.addLine(this.active, target)
+      this.addLine(this.activeNode, target)
     },
     addLine(origin, target) {
       this.lines.push({
@@ -132,6 +128,7 @@ export default {
         y2: this.getElCoorY(target._el),
         visiable: true
       });
+      this.$emit('lineChange', this.lines)
     },
     expandHandler() {
       this.$nextTick(() => {
@@ -147,6 +144,19 @@ export default {
           line.y2 = this.getElCoorY(line.target._el)
         })
       })
+    },
+    removeLines(event) {
+      if (event.keyCode === 8 || event.keyCode === 46) {
+        let i = 0
+        while(i < this.lines.length) {
+          if (this.lines[i].active) {
+            this.lines.splice(i, 1)
+          } else {
+            i++
+          }
+        }
+      }
+      this.$emit('lineChange', this.lines)
     }
   },
 };

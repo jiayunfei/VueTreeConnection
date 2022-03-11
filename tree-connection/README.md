@@ -1,24 +1,18 @@
 # tree-connection
 
-## Project setup
-```
-npm install
-```
+## 一款树形连线的好用软件
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+    props: {
+      origin: {
+        type: Array,
+        required: true
+      },
+      target: {
+        type: Array,
+        required: true
+      },
+      lines: {
+        type: Array,
+        default: () => []
+      }
+    }
