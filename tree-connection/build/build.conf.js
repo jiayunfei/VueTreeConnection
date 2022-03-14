@@ -21,11 +21,6 @@ module.exports = {
         exclude: path.resolve(__dirname, 'node_modules/')
       },
       {
-        test: /\.js$/,
-        use: 'babel-loader',
-        exclude: path.resolve(__dirname, 'node_modules/')
-      },
-      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         use: [{
           loader: 'url-loader',
@@ -35,17 +30,6 @@ module.exports = {
           }
         }],
         exclude: path.resolve(__dirname, 'node_modules/')
-      },
-      {
-        test: /\.(woff|woff2|svg|eot|ttf|otf)$/,
-        exclude: path.resolve(__dirname, 'node_modules/'),
-        use: [{
-          loader: 'file-loader',
-          options: {
-            limit: 10000,
-            name: 'fonts/[name].[ext]'
-          }
-        }]
       },
       {
         test: /\.css$/,

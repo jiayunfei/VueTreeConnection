@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div class="box"></div>
     <mapper 
       :origin="originData"
       :target="targetData"
@@ -55,5 +56,8 @@ export default {
 * {
   padding: 0;
   margin: 0;
+}
+.box {
+  height: 300px;
 }
 </style>

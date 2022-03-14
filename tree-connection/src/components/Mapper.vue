@@ -1,5 +1,5 @@
 <template>
-  <div class="mapper-container">
+  <div class="mapper-container" ref="mapper">
     <tree-control
       :treeData="origin"
       :activeItem="activeNode.item"
@@ -112,6 +112,7 @@ export default {
         top += el.offsetTop
         el = el.offsetParent
       }
+      top -= this.$refs.mapper.offsetTop
       return top + 13
     },
     addConnect(target) {
